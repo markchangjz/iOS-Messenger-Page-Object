@@ -1,16 +1,17 @@
 import XCTest
 
 class MessengerUITests: XCTestCase {
+	
     var homePage: HomePage!
         
     override func setUp() {
         super.setUp()
         
         continueAfterFailure = false
+		UITest.sharedInstance.testCase = self
+		
         XCUIApplication().launch()
-        
-        UITest.sharedInstance.testCase = self
-                
+		
         homePage = StartPage().loginMessengerIfNeeded("example@messenger.com", password: "example")
     }
     
@@ -41,4 +42,10 @@ class MessengerUITests: XCTestCase {
         
         XCTAssertEqual(chatPage.userName, "Mark")
     }
+	
+	func testChatWithPeople() {
+		let chatRoomPage = homePage.chat(with: "Nadia").sendMessage("Hello")
+		
+		XCTAssertEqual(chatRoomPage.leatestMessage, "Hello")
+	}
 }
