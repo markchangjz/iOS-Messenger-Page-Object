@@ -4,13 +4,13 @@ class UITest {
 	static let sharedInstance = UITest()
 	var testCase: XCTestCase!
 	
-	private init() { }
+	fileprivate init() { }
 }
 
 class Page {
     static let app = XCUIApplication()
 	
-    private func waitForPageLoaded() { }
+    fileprivate func waitForPageLoaded() { }
     
     required init() {
         waitForPageLoaded()
@@ -19,7 +19,7 @@ class Page {
 
 final class StartPage: Page {
 	
-    func loginMessengerIfNeeded(account: String, password: String) -> HomePage {
+    func loginMessengerIfNeeded(_ account: String, password: String) -> HomePage {
         // Log in
         
         return HomePage()
@@ -37,10 +37,10 @@ final class HomePage: Page, MessengerTabBar, MessengerSearchBar {
     }
     
     private func userCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.elementBoundByIndex(i)
+        return Page.app.cells.element(boundBy: i)
     }
     
-    private override func waitForPageLoaded() {
+    fileprivate override func waitForPageLoaded() {
         waitFor(newMessageButton, .Exists)
     }
     
@@ -83,7 +83,7 @@ class PeoplePage: Page, MessengerTabBar, MessengerSearchBar {
     let allButton = Page.app.buttons["All"]
     let activeButton = Page.app.buttons["Active"]
     
-    private override func waitForPageLoaded() {
+    fileprivate override func waitForPageLoaded() {
         waitFor(addFriendButton, .Exists)
     }
     
@@ -106,12 +106,12 @@ final class PeopleActivePage: PeoplePage {
     
     private let meCell = Page.app.cells["Me"]
     
-    private override func waitForPageLoaded() {
+    fileprivate override func waitForPageLoaded() {
         waitFor(meCell, .Exists)
     }
     
     private func userCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.elementBoundByIndex(i)
+        return Page.app.cells.element(boundBy: i)
     }
     
     func talkWithFriend(at i: UInt) -> ChatRoomPage {
@@ -144,15 +144,15 @@ final class ChatRoomPage: Page, ChatRoomNavigationBar {
         return messageCell(at: numberOfMessage - 1).label
     }
     
-    private override func waitForPageLoaded() {
+    fileprivate override func waitForPageLoaded() {
         waitFor(messageTextField, .Exists)
     }
     
     func messageCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.elementBoundByIndex(i)
+        return Page.app.cells.element(boundBy: i)
     }
     
-    func sendMessage(message: String) -> Self {
+    func sendMessage(_ message: String) -> Self {
         messageTextField.tap()
         messageTextField.typeText(message)
         return self
@@ -165,11 +165,11 @@ final class SearchPage: Page {
     
     let searchTextField = Page.app.textFields["search"]
     
-    private override func waitForPageLoaded() {
+    fileprivate override func waitForPageLoaded() {
         waitFor(searchTextField, .Exists)
     }
     
-    func search(keyword: String) -> SearchResultPage {
+    func search(_ keyword: String) -> SearchResultPage {
         searchTextField.typeText(keyword + "\n")
         return SearchResultPage()
     }
@@ -178,10 +178,10 @@ final class SearchPage: Page {
 final class SearchResultPage: Page {
     
     private func userCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.elementBoundByIndex(i)
+        return Page.app.cells.element(boundBy: i)
     }
     
-    private override func waitForPageLoaded() {
+    fileprivate override func waitForPageLoaded() {
         // ...
     }
     

@@ -11,47 +11,52 @@ protocol MessengerTabBar {
 }
 
 extension MessengerTabBar {
-    private var homeButton: XCUIElement {
+    fileprivate var homeButton: XCUIElement {
         return Page.app.buttons["Home"]
     }
     
-    private var callsButton: XCUIElement {
+    fileprivate var callsButton: XCUIElement {
         return Page.app.buttons["Calls"]
     }
     
-    private var groupsButton: XCUIElement {
+    fileprivate var groupsButton: XCUIElement {
         return Page.app.buttons["Groups"]
     }
     
-    private var peopleButton: XCUIElement {
+    fileprivate var peopleButton: XCUIElement {
         return Page.app.buttons["People"]
     }
     
-    private var meButton: XCUIElement {
+    fileprivate var meButton: XCUIElement {
         return Page.app.buttons["Me"]
     }
-    
+
+	@discardableResult
     func goToHomePage() -> HomePage {
         homeButton.tap()
         return HomePage()
     }
-    
+
+	@discardableResult
     func goToCallsPage() -> CallsPage {
         callsButton.tap()
         return CallsPage()
     }
     
-    func goToGroupsPage() -> GroupsPage {
+	@discardableResult
+	func goToGroupsPage() -> GroupsPage {
         groupsButton.tap()
         return GroupsPage()
     }
     
-    func goToPeoplePage() -> PeoplePage {
+	@discardableResult
+	func goToPeoplePage() -> PeoplePage {
         peopleButton.tap()
         return PeoplePage()
     }
     
-    func goToMePage() -> MePage {
+	@discardableResult
+	func goToMePage() -> MePage {
         meButton.tap()
         return MePage()
     }
@@ -60,15 +65,15 @@ extension MessengerTabBar {
 // MARK: ChatNavigationBar
 
 protocol ChatRoomNavigationBar {
-    func backTo<T: Page>(type: T.Type) -> T
+    func backTo<T: Page>(_ type: T.Type) -> T
 }
 
 extension ChatRoomNavigationBar {
-    private var backButton: XCUIElement {
+    fileprivate var backButton: XCUIElement {
         return Page.app.navigationBars.buttons["Back"]
     }
     
-    func backTo<T: Page>(type: T.Type) -> T {
+    func backTo<T: Page>(_ type: T.Type) -> T {
         backButton.tap()
         return type.init()
     }
@@ -78,15 +83,15 @@ extension ChatRoomNavigationBar {
 
 protocol MessengerSearchBar {
     func goToSearchPage() -> SearchPage
-    func cancelAndExpectTransitionToPage<T: Page>(type: T.Type) -> T
+    func cancelAndExpectTransitionToPage<T: Page>(_ type: T.Type) -> T
 }
 
 extension MessengerSearchBar {
-    private var cancelButton: XCUIElement {
+    fileprivate var cancelButton: XCUIElement {
         return Page.app.navigationBars.buttons["Cancel"]
     }
     
-    private var searchTextField: XCUIElement {
+    fileprivate var searchTextField: XCUIElement {
         return Page.app.textFields["search"]
     }
     
@@ -95,7 +100,7 @@ extension MessengerSearchBar {
         return SearchPage()
     }
     
-    func cancelAndExpectTransitionToPage<T: Page>(type: T.Type) -> T {
+    func cancelAndExpectTransitionToPage<T: Page>(_ type: T.Type) -> T {
         cancelButton.tap()
         return type.init()
     }
@@ -108,7 +113,7 @@ enum UIStatus: String {
     case NotExists = "exists == false"
 }
 
-func waitFor(element: XCUIElement, _ status: UIStatus, withIn timeout: NSTimeInterval = 20) {
-    UITest.sharedInstance.testCase.expectationForPredicate(NSPredicate(format: status.rawValue), evaluatedWithObject: element, handler: nil)
-    UITest.sharedInstance.testCase.waitForExpectationsWithTimeout(timeout, handler: nil)
+func waitFor(_ element: XCUIElement, _ status: UIStatus, withIn timeout: TimeInterval = 20) {
+    UITest.sharedInstance.testCase.expectation(for: NSPredicate(format: status.rawValue), evaluatedWith: element, handler: nil)
+    UITest.sharedInstance.testCase.waitForExpectations(timeout: timeout, handler: nil)
 }

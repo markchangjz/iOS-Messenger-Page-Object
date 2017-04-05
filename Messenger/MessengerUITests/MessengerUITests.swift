@@ -31,9 +31,9 @@ class MessengerUITests: XCTestCase {
         let numberOfMessageAfterSendingMessage = chatPage.numberOfMessage
         
         XCTAssertEqual(chatPage.leatestMessage, "Hi, Mark!")
-        XCTAssertEqual(numberOfMessageBeforeSendingMessage + 1, numberOfMessageAfterSendingMessage)
+        XCTAssertEqual(numberOfMessageBeforeSendingMessage + UInt(1), numberOfMessageAfterSendingMessage)
         
-        homePage = chatPage.backTo(HomePage)
+        homePage = chatPage.backTo(HomePage.self)
         XCTAssertEqual(homePage.getRecentMessage(at: 0), "Hi, Mark!")
     }
     
