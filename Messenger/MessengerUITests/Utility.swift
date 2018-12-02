@@ -11,23 +11,23 @@ protocol MessengerTabBar {
 }
 
 extension MessengerTabBar {
-    fileprivate var homeButton: XCUIElement {
+    private var homeButton: XCUIElement {
         return Page.app.buttons["Home"]
     }
     
-    fileprivate var callsButton: XCUIElement {
+    private var callsButton: XCUIElement {
         return Page.app.buttons["Calls"]
     }
     
-    fileprivate var groupsButton: XCUIElement {
+    private var groupsButton: XCUIElement {
         return Page.app.buttons["Groups"]
     }
     
-    fileprivate var peopleButton: XCUIElement {
+    private var peopleButton: XCUIElement {
         return Page.app.buttons["People"]
     }
     
-    fileprivate var meButton: XCUIElement {
+    private var meButton: XCUIElement {
         return Page.app.buttons["Me"]
     }
 
@@ -69,7 +69,7 @@ protocol ChatRoomNavigationBar {
 }
 
 extension ChatRoomNavigationBar {
-    fileprivate var backButton: XCUIElement {
+    private var backButton: XCUIElement {
         return Page.app.navigationBars.buttons["Back"]
     }
     
@@ -87,11 +87,11 @@ protocol MessengerSearchBar {
 }
 
 extension MessengerSearchBar {
-    fileprivate var cancelButton: XCUIElement {
+    private var cancelButton: XCUIElement {
         return Page.app.navigationBars.buttons["Cancel"]
     }
     
-    fileprivate var searchTextField: XCUIElement {
+    private var searchTextField: XCUIElement {
         return Page.app.textFields["search"]
     }
     
@@ -109,11 +109,16 @@ extension MessengerSearchBar {
 // MARK: Wait element
 
 enum UIStatus: String {
-    case Exists = "exists == true"
-    case NotExists = "exists == false"
+    case exists = "exists == true"
+    case notExists = "exists == false"
+	case hittable = "isHittable == true"
 }
 
-func waitFor(_ element: XCUIElement, _ status: UIStatus, withIn timeout: TimeInterval = 20) {
-    UITest.sharedInstance.testCase.expectation(for: NSPredicate(format: status.rawValue), evaluatedWith: element, handler: nil)
-    UITest.sharedInstance.testCase.waitForExpectations(timeout: timeout, handler: nil)
+func wait(for element: XCUIElement, _ status: UIStatus, withIn timeout: TimeInterval = 0.1) {
+	let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: status.rawValue), object: element)
+	let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
+	
+	if (result == .timedOut) {
+		XCTFail(expectation.description)
+	}
 }

@@ -1,12 +1,5 @@
 import XCTest
 
-class UITest {
-	static let sharedInstance = UITest()
-	var testCase: XCTestCase!
-	
-	fileprivate init() { }
-}
-
 class Page {
     static let app = XCUIApplication()
 	
@@ -36,16 +29,16 @@ final class HomePage: Page, MessengerTabBar, MessengerSearchBar {
         return Page.app.cells[name]
     }
     
-    private func userCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.element(boundBy: i)
+    private func userCell(at index: Int) -> XCUIElement {
+        return Page.app.cells.element(boundBy: index)
     }
     
     fileprivate override func waitForPageLoaded() {
-        waitFor(newMessageButton, .Exists)
+        wait(for: newMessageButton, .exists)
     }
     
-    func getRecentMessage(at i: UInt) -> String {
-        return userCell(at: i).staticTexts["Message"].label
+    func getRecentMessage(at index: Int) -> String {
+        return userCell(at: index).staticTexts["Message"].label
     }
     
     func chat(with name: String) -> ChatRoomPage {
@@ -79,12 +72,12 @@ final class GroupsPage: Page, MessengerTabBar, MessengerSearchBar {
 
 class PeoplePage: Page, MessengerTabBar, MessengerSearchBar {
     
-    let addFriendButton = Page.app.buttons["Add Friend"]
-    let allButton = Page.app.buttons["All"]
-    let activeButton = Page.app.buttons["Active"]
+    private let addFriendButton = Page.app.buttons["Add Friend"]
+    private let allButton = Page.app.buttons["All"]
+    private let activeButton = Page.app.buttons["Active"]
     
     fileprivate override func waitForPageLoaded() {
-        waitFor(addFriendButton, .Exists)
+        wait(for: addFriendButton, .exists)
     }
     
     func switchToAll() -> PeopleAllPage {
@@ -107,15 +100,15 @@ final class PeopleActivePage: PeoplePage {
     private let meCell = Page.app.cells["Me"]
     
     fileprivate override func waitForPageLoaded() {
-        waitFor(meCell, .Exists)
+        wait(for: meCell, .exists)
     }
     
-    private func userCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.element(boundBy: i)
+    private func userCell(at index: Int) -> XCUIElement {
+        return Page.app.cells.element(boundBy: index)
     }
     
-    func talkWithFriend(at i: UInt) -> ChatRoomPage {
-        userCell(at: i).tap()
+    func talkWithFriend(at index: Int) -> ChatRoomPage {
+        userCell(at: index).tap()
         return ChatRoomPage()
     }
 }
@@ -132,7 +125,7 @@ final class ChatRoomPage: Page, ChatRoomNavigationBar {
     
     private let messageTextField = Page.app.textFields["message"]
     
-    var numberOfMessage: UInt {
+    var numberOfMessage: Int {
         return Page.app.cells.count
     }
     
@@ -145,11 +138,11 @@ final class ChatRoomPage: Page, ChatRoomNavigationBar {
     }
     
     fileprivate override func waitForPageLoaded() {
-        waitFor(messageTextField, .Exists)
+        wait(for: messageTextField, .exists)
     }
     
-    func messageCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.element(boundBy: i)
+    func messageCell(at index: Int) -> XCUIElement {
+        return Page.app.cells.element(boundBy: index)
     }
     
     func sendMessage(_ message: String) -> Self {
@@ -163,10 +156,10 @@ final class ChatRoomPage: Page, ChatRoomNavigationBar {
 
 final class SearchPage: Page {
     
-    let searchTextField = Page.app.textFields["search"]
+    private let searchTextField = Page.app.textFields["search"]
     
     fileprivate override func waitForPageLoaded() {
-        waitFor(searchTextField, .Exists)
+        wait(for: searchTextField, .exists)
     }
     
     func search(_ keyword: String) -> SearchResultPage {
@@ -177,16 +170,16 @@ final class SearchPage: Page {
 
 final class SearchResultPage: Page {
     
-    private func userCell(at i: UInt) -> XCUIElement {
-        return Page.app.cells.element(boundBy: i)
+    private func userCell(at index: Int) -> XCUIElement {
+        return Page.app.cells.element(boundBy: index)
     }
     
     fileprivate override func waitForPageLoaded() {
         // ...
     }
     
-    func chatWithUser(at i: UInt) -> ChatRoomPage {
-        userCell(at: i).tap()
+    func chatWithUser(at index: Int) -> ChatRoomPage {
+        userCell(at: index).tap()
         return ChatRoomPage()
     }
 }
